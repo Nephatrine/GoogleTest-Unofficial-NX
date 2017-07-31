@@ -241,16 +241,30 @@ function(py_test name)
     # directly bind it from cmake. ${CTEST_CONFIGURATION_TYPE} is known
     # only at ctest runtime (by calling ctest -c <Configuration>), so
     # we have to escape $ to delay variable substitution here.
-    if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
-      add_test(
-        NAME ${name}
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
-            --build_dir=${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>)
-    else (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
-      add_test(
-        ${name}
-        ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
-          --build_dir=${CMAKE_CURRENT_BINARY_DIR}/\${CTEST_CONFIGURATION_TYPE})
-    endif (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
+    if("x${CMAKE_BUILD_TYPE}" STREQUAL "x")
+      if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
+        add_test(
+          NAME ${name}
+          COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
+              --build_dir=${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>)
+      else (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
+        add_test(
+          ${name}
+          ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
+            --build_dir=${CMAKE_CURRENT_BINARY_DIR}/\${CTEST_CONFIGURATION_TYPE})
+      endif (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
+	else()
+      if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
+        add_test(
+          NAME ${name}
+          COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
+              --build_dir=${CMAKE_CURRENT_BINARY_DIR})
+      else (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
+        add_test(
+          ${name}
+          ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
+            --build_dir=${CMAKE_CURRENT_BINARY_DIR})
+      endif (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
+	endif()
   endif()
 endfunction()
