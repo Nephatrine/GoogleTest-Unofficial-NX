@@ -253,7 +253,7 @@ function(py_test name)
           ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
             --build_dir=${CMAKE_CURRENT_BINARY_DIR}/\${CTEST_CONFIGURATION_TYPE})
       endif (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
-	else()
+    else()
       if (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
         add_test(
           NAME ${name}
@@ -265,6 +265,6 @@ function(py_test name)
           ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/test/${name}.py
             --build_dir=${CMAKE_CURRENT_BINARY_DIR})
       endif (${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION} GREATER 3.1)
-	endif()
+    endif()
   endif()
 endfunction()
