@@ -390,8 +390,14 @@ TEST(DirectoryTest, RootOfWrongDriveDoesNotExists) {
       non_drive[1] = ':';
       non_drive[2] = '\\';
       non_drive[3] = '\0';
-      EXPECT_FALSE(FilePath(non_drive).DirectoryExists());
-      break;
+      // Prevent failures when Z:\ is present ("exists") but we cannot change to it because no media
+      // is inserted in the drive.
+      int type = GetDriveType(non_drive);
+      if( type != DRIVE_REMOVABLE && type != DRIVE_CDROM && type != DRIVE_REMOTE )
+      {
+        EXPECT_FALSE(FilePath(non_drive).DirectoryExists());
+        break;
+      }
     }
   _chdrive(saved_drive_);
 }
